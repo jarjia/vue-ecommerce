@@ -1,15 +1,6 @@
 <script setup lang="ts">
 import router from "@/routes";
-import { getCrsfToken } from "@/services";
 import { onBeforeMount } from "vue";
-
-const getCookies = async () => {
-  try {
-    await getCrsfToken();
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 onBeforeMount(() => {
   let auth = localStorage.getItem("auth");
