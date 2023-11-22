@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: main;
+  src: url("/fonts/main.ttf");
+}
+
+body {
+  font-family: main;
+}
+
+.auth-autofill {
+  background: transparent;
+  -webkit-text-fill-color: inherit;
+  box-shadow: 0 0 0px 1000px transparent;
+  -webkit-box-shadow: 0 0 0px 1000px transparent;
+  transition: background-color 5000s ease-in-out 0s;
+}
