@@ -78,7 +78,7 @@ onBeforeUnmount(() => {
       class="flex px-2 justify-between items-center select-none cursor-default your-dropdown-container-1 h-[36px] auth-autofill mt-1 bg-transparent border-2 z-[3] border-black outline-none py-1"
     >
       <p>{{ value.length > 0 ? value : "" }}</p>
-      <DropDownIcon />
+      <DropDownIcon :isProduct="false" />
     </div>
     <div v-if="showDropDown" class="relative">
       <div

@@ -3,12 +3,15 @@ import { AuthLayout, Input, Spinner } from "@/components";
 import { useForm } from "vee-validate";
 import { logInSchema } from "@/schema";
 import { useMutation } from "@tanstack/vue-query";
-import { postLoginUser, postSendVerify } from "@/services";
+import { postLoginUser, postSendVerify, getCrsfToken } from "@/services";
 import router from "@/routes";
-import { ref } from "vue";
-import { getCrsfToken } from "@/services";
+import { onBeforeMount, ref } from "vue";
 
-const getCookies = async () => {
+onBeforeMount(() => {
+  getCsrfCookies();
+});
+
+const getCsrfCookies = async () => {
   try {
     await getCrsfToken();
   } catch (error) {
@@ -50,7 +53,6 @@ const { mutate: loginMutation, isPending } = useMutation({
 });
 
 const onSubmit = handleSubmit((values) => {
-  getCookies();
   loginMutation(values);
 });
 </script>

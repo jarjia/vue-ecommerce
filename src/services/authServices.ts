@@ -1,5 +1,6 @@
 import axiosInstance from "./axios";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export const getCountries = () => {
   return axiosInstance.get("/api/countries");
@@ -22,7 +23,11 @@ export const getCrsfToken = () => {
 };
 
 export const postLoginUser = (loginCredentials: any) => {
-  return axiosInstance.post("/api/login", loginCredentials);
+  return axiosInstance.post("/api/login", loginCredentials, {
+    headers: {
+      "X-Xsrf-Token": Cookies.get("XSRF-TOKEN"),
+    },
+  });
 };
 
 export const getUserData = () => {
@@ -39,8 +44,4 @@ export const postVerify = (data: any) => {
 
 export const postSendVerify = (data: any) => {
   return axiosInstance.post("/api/send-verify", data);
-};
-
-export const postTest = () => {
-  return axiosInstance.post("/api/post");
 };

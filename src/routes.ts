@@ -1,5 +1,12 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import { Auth, Login, ProductList } from "./components";
+import {
+  Auth,
+  CreateProduct,
+  Login,
+  ProductList,
+  Profile,
+  ProductView,
+} from "./components";
 
 const routes = [
   {
@@ -22,6 +29,21 @@ const routes = [
     path: "/login",
     name: "login",
     component: Login,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+  },
+  {
+    path: "/product/create",
+    name: "product create",
+    component: CreateProduct,
+  },
+  {
+    path: "/product-view/:id",
+    name: "product view",
+    component: ProductView,
   },
 ];
 

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import router from "@/routes";
 import { onBeforeMount } from "vue";
+import { loadImage } from "@/helpers";
 
 onBeforeMount(() => {
+  loadImage(["/images/form.png"]);
   let auth = localStorage.getItem("auth");
   if (auth === "yes") {
     router.push("/product-list");

@@ -3,3 +3,8 @@ export * from "./SuccessIcon";
 export * from "./Cart";
 export * from "./Filter";
 export * from "./Search";
+export * from "./BurgerIcon";
+export * from "./PlusIcon";
+export * from "./TrashBinIcon";
+export * from "./PenIcon";
+export * from "./ImageIcon";

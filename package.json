@@ -12,13 +12,17 @@
     "@tanstack/vue-query": "^5.8.4",
     "@vee-validate/zod": "^4.11.8",
     "axios": "^1.6.1",
+    "js-cookie": "^3.0.5",
     "pinia": "^2.1.7",
+    "swiper": "^8.4.7",
     "vee-validate": "^4.11.8",
     "vue": "^3.3.4",
+    "vue-awesome-swiper": "^5.0.1",
     "vue-router": "^4.2.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@vitejs/plugin-vue": "^4.2.3",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",

@@ -17,6 +17,8 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "resolvePackageJsonImports": false,
+    "resolvePackageJsonExports": false,
 
     /* Linting */
     "strict": true,
