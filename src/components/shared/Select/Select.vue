@@ -53,6 +53,7 @@ let showDropDown: Ref<boolean> = ref(false);
 
 const close = (e: MouseEvent) => {
   const targetElement = e.target as Element;
+  console.log(data.value?.data);
 
   if (!showDropDown.value) {
     searchDropDown.value = "";
@@ -97,7 +98,7 @@ onBeforeUnmount(() => {
         <div
           v-if="data?.data && data?.data.length > 0"
           class="px-2 py-[2px] cursor-pointer hover:bg-blue-400 hover:text-white"
-          v-for="residence in data?.data.filter((item: CountryItem) =>
+          v-for="residence in data?.data &&   data?.data.filter((item: CountryItem) =>
             item.country.toLowerCase().includes(searchDropDown)
           )"
           :key="residence.id"
