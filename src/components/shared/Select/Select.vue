@@ -63,7 +63,7 @@ const close = (e: MouseEvent) => {
     searchDropDown.value = "";
   } else {
     let obj = document.getElementById("search") as HTMLElement;
-    obj.focus();
+    obj && obj.focus();
   }
 };
 
@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
         class="absolute shadow-2xl z-[5] scrollbar bg-[#dbe7ff] bg-opacity-[0.91] w-full max-h-[200px] overflow-y-auto"
       >
         <div
-          v-if="data?.data.length > 0"
+          v-if="data?.data && data?.data.length > 0"
           class="px-2 py-[2px] cursor-pointer hover:bg-blue-400 hover:text-white"
           v-for="residence in data?.data.filter((item: CountryItem) =>
             item.country.toLowerCase().includes(searchDropDown)
