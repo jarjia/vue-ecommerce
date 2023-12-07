@@ -3,7 +3,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const getCountries = () => {
-  return axiosInstance.get("/api/countries");
+  return axiosInstance.get("/api/countries", {
+    headers: {
+      Accept: "application/json",
+    },
+  });
 };
 
 export const getCities = (country: string) => {
