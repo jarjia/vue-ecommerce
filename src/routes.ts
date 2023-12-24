@@ -4,8 +4,10 @@ import {
   CreateProduct,
   Login,
   ProductList,
-  Profile,
+  Dashboard,
   ProductView,
+  EditProduct,
+  Cart,
 } from "./components";
 
 const routes = [
@@ -31,9 +33,9 @@ const routes = [
     component: Login,
   },
   {
-    path: "/profile",
-    name: "profile",
-    component: Profile,
+    path: "/dashboard",
+    name: "dashboard",
+    component: Dashboard,
   },
   {
     path: "/product/create",
@@ -44,6 +46,16 @@ const routes = [
     path: "/product-view/:id",
     name: "product view",
     component: ProductView,
+  },
+  {
+    path: "/product/edit/:id",
+    name: "product edit",
+    component: EditProduct,
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: Cart,
   },
 ];
 

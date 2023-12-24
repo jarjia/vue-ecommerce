@@ -53,7 +53,6 @@ let showDropDown: Ref<boolean> = ref(false);
 
 const close = (e: MouseEvent) => {
   const targetElement = e.target as Element;
-  console.log(data.value?.data);
 
   if (!showDropDown.value) {
     searchDropDown.value = "";

@@ -1,50 +1,42 @@
 <script setup lang="ts">
 import router from "@/routes";
-import { getProducts } from "@/services";
+import { getProducts, getUserProducts } from "@/services";
 import { sorts } from "@/helpers";
 import { useQuery } from "@tanstack/vue-query";
-import {
-  onBeforeMount,
-  onBeforeUnmount,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-} from "vue";
-import { Product, Search, DropDownIcon, PlusIcon } from "@/components";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { Product, SearchIcon, DropDownIcon, PlusIcon } from "@/components";
 
 defineProps({
   isProfile: Boolean,
 });
 
-const { data, isLoading } = useQuery({
-  queryKey: ["products"],
-  queryFn: getProducts,
-});
-
-onBeforeMount(() => {
-  let auth = localStorage.getItem("auth");
-  if (auth === null) {
-    router.push("/login");
-  }
-});
-
-const scrollPosition = reactive({
-  y: 0,
+const { data, isLoading, refetch } = useQuery({
+  queryKey:
+    router.currentRoute.value.name === "dashboard"
+      ? ["user-products"]
+      : ["products"],
+  queryFn:
+    router.currentRoute.value.name === "dashboard"
+      ? () =>
+          getUserProducts({
+            sort: router.currentRoute.value.query.sort as string,
+            search: (router.currentRoute.value.query.search as string) || "",
+          })
+      : () =>
+          getProducts({
+            sort: router.currentRoute.value.query.sort as string,
+            search: (router.currentRoute.value.query.search as string) || "",
+          }),
 });
 
 const isSort = ref(false);
-const search = ref("");
+const search = ref(router.currentRoute.value.query.search || "");
 
 const sort = ref(
   router.currentRoute.value.query.sort
     ? router.currentRoute.value.query.sort
     : sorts[0]
 );
-
-const updateScrollPosition = () => {
-  scrollPosition.y = window.scrollY;
-};
 
 const close = (e: MouseEvent) => {
   const targetElement = e.target as Element;
@@ -60,26 +52,45 @@ const close = (e: MouseEvent) => {
 const changeSort = (sortItem: string) => {
   isSort.value = false;
   sort.value = sortItem;
-  if (sortItem !== "All products") {
+  if (router.currentRoute.value.query.sort !== sortItem) {
+    if (sortItem !== "no sorting") {
+      router.push({
+        query: { ...router.currentRoute.value.query, sort: sortItem },
+      });
+      setTimeout(() => {
+        refetch();
+      }, 300);
+    } else {
+      if (router.currentRoute.value.query.sort) {
+        router.push("/product-list");
+        setTimeout(() => {
+          refetch();
+        }, 300);
+      }
+    }
+  }
+};
+
+const handleSearch = () => {
+  if (search.value !== router.currentRoute.value.query.search) {
+    setTimeout(() => {
+      refetch();
+    }, 300);
     router.push({
-      query: { ...router.currentRoute.value.query, sort: sortItem },
+      query: {
+        ...router.currentRoute.value.query,
+        search: search.value,
+      },
     });
-  } else {
-    if (router.currentRoute.value.query.sort) router.push("/product-list");
   }
 };
 
 onMounted(() => {
   document.addEventListener("click", close);
-  window.addEventListener("scroll", updateScrollPosition);
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener("click", close);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("scroll", updateScrollPosition);
 });
 </script>
 
@@ -97,22 +108,12 @@ onUnmounted(() => {
           type="text"
           placeholder="Search products..."
           v-model="search"
-          v-on:keyup.enter="
-            () => {
-              if (search.length > 0)
-                router.push({
-                  query: {
-                    ...router.currentRoute.value.query,
-                    search: search,
-                  },
-                });
-            }
-          "
+          v-on:keyup.enter="handleSearch"
           class="border-[1px] select-none rounded-full placeholder:text-black pl-2 pr-8 py-[6px] w-80 border-black outline-none"
           :class="isProfile ? 'mini-desk:w-full' : 'mobile:w-full'"
         />
         <div class="relative bottom-3 right-[32px]">
-          <Search class="absolute" />
+          <SearchIcon class="absolute" />
         </div>
       </div>
       <div class="flex flex-col justify-center">
@@ -126,14 +127,14 @@ onUnmounted(() => {
           @click="isSort = !isSort"
         >
           <p
-            class="truncate w-[150px] text-sm select-none"
+            class="truncate capitalize w-[150px] text-sm select-none"
             :class="
               isProfile
                 ? 'mini-desk:w-full mini-desk:flex'
                 : 'mobile:w-full mobile:flex'
             "
           >
-            Sort By: {{ sort }}
+            sort by: {{ sort }}
           </p>
           <DropDownIcon :isProduct="false" />
         </button>
@@ -142,7 +143,7 @@ onUnmounted(() => {
             <li
               v-for="item in sorts"
               @click="() => changeSort(item)"
-              class="py-1 cursor-pointer px-2 hover:text-white hover:bg-blue-300"
+              class="py-1 cursor-pointer px-2 capitalize hover:text-white hover:bg-blue-300"
             >
               {{ item }}
             </li>
@@ -175,6 +176,7 @@ onUnmounted(() => {
       :name="item.name"
       :price="item.price"
       :mainImage="item.mainImage"
+      :thumbnails="item.thumbnails"
       :isInStock="item.isInStock"
     />
   </div>
@@ -190,7 +192,7 @@ onUnmounted(() => {
       <div class="text-center py-20 mini-desk:py-4 mini-desk:text-center">
         <h3 class="text-3xl">Your products could not be found...</h3>
         <button
-          @click="router.push('product/create')"
+          @click="router.push('/product/create')"
           class="capitalize mt-2 bg-blue-400 text-white p-2 rounded"
         >
           create one!
@@ -206,7 +208,9 @@ onUnmounted(() => {
         <h3 class="text-3xl">No products found...</h3>
         <p class="text-md mt-4">
           You can add your products from the
-          <RouterLink to="profile" class="text-blue-400">Profile!</RouterLink>
+          <RouterLink to="/dashboard" class="text-blue-400"
+            >Profile!</RouterLink
+          >
         </p>
       </div>
     </div>

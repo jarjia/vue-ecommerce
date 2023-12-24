@@ -123,6 +123,7 @@ const onSubmit = handleSubmit((values) => {
       <form
         @submit="onSubmit"
         class="grid grid-cols-2 sm:grid-cols-1 px-4 mt-6 gap-8 sm:gap-3"
+        autocomplete="off"
       >
         <div>
           <Input type="text" name="fullName" label="Full name" />

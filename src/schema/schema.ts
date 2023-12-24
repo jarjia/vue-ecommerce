@@ -40,3 +40,64 @@ export const logInSchema = toTypedSchema(
     }),
   })
 );
+
+export const createProductSchema = toTypedSchema(
+  zod.object({
+    name: zod
+      .string()
+      .min(1, "Product name is required")
+      .max(24, "Product name must be less than 24 characters"),
+    type: zod
+      .string()
+      .min(1, {
+        message: "Product type is Required",
+      })
+      .max(24, "Product type must be less than 20 characters"),
+    quantity: zod
+      .number()
+      .min(0, "Product Quantity is required")
+      .max(100, "Product Quantity must be less than 100"),
+    price: zod
+      .number()
+      .min(0, "Product Price is required")
+      .max(100000, "Product Price must be less than 100000$"),
+    description: zod
+      .string()
+      .min(1, {
+        message: "Product description is Required",
+      })
+      .max(1500, "Product description must be less than 1500 characters"),
+    images: zod.array(zod.instanceof(File)).min(1, "at least one image"),
+  })
+);
+
+export const editProductSchema = toTypedSchema(
+  zod.object({
+    name: zod
+      .string()
+      .min(1, "Product name is required")
+      .max(24, "Product name must be less than 24 characters"),
+    type: zod
+      .string()
+      .min(1, {
+        message: "Product type is Required",
+      })
+      .max(24, "Product type must be less than 20 characters"),
+    quantity: zod
+      .number()
+      .min(0, "Product Quantity is required")
+      .max(100, "Product Quantity must be less than 100"),
+    price: zod
+      .number()
+      .min(0, "Product Price is required")
+      .max(100000, "Product Price must be less than 100000$"),
+    description: zod
+      .string()
+      .min(1, {
+        message: "Product description is Required",
+      })
+      .max(1500, "Product description must be less than 1500 characters"),
+    images: zod.array(zod.any()).min(1, "at least one image"),
+    files: zod.any().optional(),
+  })
+);

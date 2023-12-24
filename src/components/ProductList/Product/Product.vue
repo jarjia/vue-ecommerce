@@ -1,13 +1,23 @@
 <script setup lang="ts">
+import { loadImage, isFreeProduct } from "@/helpers";
 import router from "@/routes";
 
-defineProps({
-  price: String,
+const props = defineProps({
+  price: {
+    type: String,
+    default: true,
+  },
   name: String,
   mainImage: String,
   id: Number,
   isInStock: Boolean,
+  thumbnails: {
+    type: Array,
+    default: true,
+  },
 });
+
+loadImage(props.thumbnails as string[]);
 </script>
 
 <template>
@@ -37,7 +47,9 @@ defineProps({
               name?.substring(1)) as string
           }}
         </p>
-        <p class="text-white">${{ price }}</p>
+        <p class="text-white capitalize">
+          {{ isFreeProduct(props.price) ? "free" : "$" + price }}
+        </p>
       </div>
       <button
         @click="router.push(`/product-view/${id}`)"

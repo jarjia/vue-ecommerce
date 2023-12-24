@@ -3,21 +3,9 @@ import { AuthLayout, Input, Spinner } from "@/components";
 import { useForm } from "vee-validate";
 import { logInSchema } from "@/schema";
 import { useMutation } from "@tanstack/vue-query";
-import { postLoginUser, postSendVerify, getCrsfToken } from "@/services";
+import { postLoginUser, postSendVerify } from "@/services";
 import router from "@/routes";
-import { onBeforeMount, ref } from "vue";
-
-onBeforeMount(() => {
-  getCsrfCookies();
-});
-
-const getCsrfCookies = async () => {
-  try {
-    await getCrsfToken();
-  } catch (error) {
-    console.log(error);
-  }
-};
+import { ref } from "vue";
 
 const initialValues = {
   email: "",

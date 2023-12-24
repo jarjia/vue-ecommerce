@@ -12,7 +12,7 @@ defineProps({
     :class="
       isViewer
         ? 'w-[25px] h-[25px]'
-        : 'w-[calc(50%-30px)] h-1/2 bg-white rounded-full shadow-2xl'
+        : 'w-[120px] h-[120px] shadow-2xl rounded-full'
     "
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

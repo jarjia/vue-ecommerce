@@ -1,104 +1,44 @@
 <script setup lang="ts">
 import { Layout, ThumbnailViewer, TrashBinIcon, PenIcon } from "@/components";
 import router from "@/routes";
-import { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/navigation";
-import { ref } from "vue";
+import useProductView from "./useProductView";
+import { isFreeProduct } from "@/helpers";
 
-const modules = [Navigation];
-
-const isShowThumbnails = ref(false);
-const swiperInstance = ref();
-const slide = ref(0);
-
-function onSwiper(swiper: any) {
-  swiperInstance.value = swiper;
-}
-
-function goToSlide(position: number) {
-  swiperInstance.value.slideTo(position);
-}
-
-const handleOffViewer = () => {
-  isShowThumbnails.value = false;
-};
-
-const handleOnViewer = () => {
-  isShowThumbnails.value = true;
-};
-
-const handleThumbnailViewer = (index: number) => {
-  slide.value = index;
-  setTimeout(() => {
-    isShowThumbnails.value = !isShowThumbnails.value;
-  }, 100);
-};
-
-const arr = [
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/logo.png",
-    text: "slide 1",
-  },
-  {
-    img: "/images/form.png",
-    text: "slide 2",
-  },
-  {
-    img: "/images/401.jpg",
-    text: "slide 3",
-  },
-  {
-    img: "/images/mail.png",
-    text: "slide 4",
-  },
-  {
-    img: "/images/user.png",
-    text: "slide 5",
-  },
-];
+const {
+  handleOffViewer,
+  handleOnViewer,
+  handleThumbnailViewer,
+  modules,
+  onSwiper,
+  goToSlide,
+  slide,
+  isShowThumbnails,
+  isLoading,
+  deleteProductMutation,
+  data,
+  userData,
+  isAlreadyInCart,
+  createCartItemMutation,
+} = useProductView();
 </script>
 
 <template>
   <ThumbnailViewer
-    v-if="isShowThumbnails"
+    v-if="isShowThumbnails && !isLoading && data?.data"
     :handleOffViewer="handleOffViewer"
     :handleOnViewer="handleOnViewer"
-    :images="arr"
+    :images="data?.data.thumbnails"
     :slide="slide"
   />
+
   <Layout>
+    <div v-if="isLoading" class="flex items-center justify-center">
+      <img src="/gifs/loading.gif" />
+    </div>
     <div
-      class="grid grid-cols-2 px-24 gap-4 big-h:grid-cols-1 avg-desk-for-view:px-8 avg-desk-for-view:grid-cols-1 items-center h-[calc(100vh-200px)]"
+      v-if="!isLoading && data?.data"
+      class="grid grid-cols-2 px-24 items-start gap-4 big-h:grid-cols-1 avg-desk-for-view:px-8 avg-desk-for-view:grid-cols-1 h-[calc(100vh-200px)]"
     >
       <div class="w-full">
         <div
@@ -114,12 +54,12 @@ const arr = [
               @swiper="onSwiper"
             >
               <SwiperSlide
-                v-for="(item, index) in arr"
+                v-for="(item, index) in data.data.thumbnails"
                 :key="index"
                 @click="handleThumbnailViewer(index)"
                 class="bg-center bg-no-repeat bg-contain cursor-pointer"
                 :style="{
-                  backgroundImage: 'url(' + item.img + ')',
+                  backgroundImage: 'url(' + item + ')',
                 }"
               >
               </SwiperSlide>
@@ -128,13 +68,13 @@ const arr = [
         </div>
         <div class="w-full flex justify-center">
           <div
-            class="border-2 border-t-0 border-blue-400 py-1 flex w-fit gap-3 rounded-b justify-center px-4"
+            class="border-2 border-t-0 items-center border-blue-400 py-1 flex w-fit gap-3 av-desk:gap-[6px] rounded-b justify-center px-4"
           >
             <div
               @click="goToSlide(index + 1)"
-              v-for="(item, index) in arr"
+              v-for="(item, index) in data.data.thumbnails"
               :style="{
-                backgroundImage: 'url(' + item.img + ')',
+                backgroundImage: 'url(' + item + ')',
               }"
               class="w-8 h-8 bg-center cursor-pointer bg-contain hover:scale-110 active:scale-125 bg-no-repeat"
             ></div>
@@ -145,46 +85,68 @@ const arr = [
         <div
           class="flex text-xl items-center justify-between border-b-2 py-1 pb-2 border-black"
         >
-          <h3>Poco F4 GT</h3>
-          <div class="flex gap-2">
-            <button class="p-2 py-[6px] rounded bg-blue-400">
+          <h3>{{ data.data.name }}</h3>
+          <div
+            v-if="
+              userData?.id === data.data?.owner_id &&
+              userData !== null &&
+              userData.id
+            "
+            class="flex gap-2"
+          >
+            <button
+              @click="router.push(`/product/edit/${data.data.id}`)"
+              class="p-2 py-[6px] rounded bg-blue-400"
+            >
               <PenIcon />
             </button>
-            <button class="p-2 py-[6px] rounded bg-red-400">
+            <button
+              @click="() => deleteProductMutation(data?.data.id)"
+              class="p-2 py-[6px] rounded bg-red-400"
+            >
               <TrashBinIcon />
             </button>
           </div>
         </div>
-        <div class="mt-4">
+        <div class="mt-1 min-h-[200px]">
           <h4 class="capitalize text-2xl text-center mb-1">
             product description
           </h4>
           <p class="text-center">
-            One thing to note when using routes with params is that when the
-            user navigates from /users/johnny to /users/jolyne, the same
-            component instance will be reused. Since both routes render the same
-            component, this is more efficient than destroying the old instance
-            and then creating a new one. However, this also means that the
-            lifecycle hooks of the component will not be called.
+            {{ data.data.description }}
           </p>
         </div>
         <div class="flex mt-2 gap-4">
           <p>Price:</p>
-          <span>$999.99</span>
+          <span
+            >${{ data.data.price }}
+            <span class="pl-1">{{
+              isFreeProduct(data.data.price) ? "(Free)" : ""
+            }}</span>
+          </span>
         </div>
         <div class="flex mt-2 gap-4">
           <p>Quantity:</p>
-          <span>9</span>
+          <span>{{ data.data.quantity }}</span>
         </div>
         <div class="flex mt-2 gap-4">
           <p>Type:</p>
-          <span>Eloctronical</span>
+          <span>{{ data.data.type }}</span>
         </div>
         <div class="flex flex-col gap-2 mt-6 mb-4">
           <button
-            class="bg-blue-400 hover:bg-blue-500 text-white py-2 rounded capitalize"
+            @click="
+              createCartItemMutation({
+                seller_id: data.data.owner_id,
+                product_id: data.data.id,
+              })
+            "
+            :class="
+              isAlreadyInCart ? 'bg-red-400' : 'bg-blue-400 hover:bg-blue-500'
+            "
+            class="text-white py-2 rounded capitalize"
           >
-            add to cart
+            {{ isAlreadyInCart ? "already in cart!" : "add to cart" }}
           </button>
           <button
             @click="router.back()"

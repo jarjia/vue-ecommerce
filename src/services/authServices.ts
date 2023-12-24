@@ -17,9 +17,17 @@ export const getCities = (country: string) => {
 };
 
 export const createUser = (userData: {}) => {
-  return axiosInstance.post("/api/register", {
-    userData,
-  });
+  return axiosInstance.post(
+    "/api/register",
+    {
+      userData,
+    },
+    {
+      headers: {
+        "X-Xsrf-Token": Cookies.get("XSRF-TOKEN"),
+      },
+    }
+  );
 };
 
 export const getCrsfToken = () => {
@@ -39,7 +47,11 @@ export const getUserData = () => {
 };
 
 export const logOutUser = () => {
-  return axiosInstance.get("/api/logout");
+  return axiosInstance.get("/api/logout", {
+    headers: {
+      "X-Xsrf-Token": Cookies.get("XSRF-TOKEN"),
+    },
+  });
 };
 
 export const postVerify = (data: any) => {

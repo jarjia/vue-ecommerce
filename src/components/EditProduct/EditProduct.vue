@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
-import useCreateProduct from "./useCreateProduct";
+import useCreateProduct from "./useEditProduct";
 import { Layout, ImageIcon, PlusIcon } from "@/components";
 
 const {
@@ -23,13 +23,24 @@ const {
   onSwiper,
   submitCount,
   modules,
+  isLoading,
+  isSuccess,
   isPending,
+  isMounted,
 } = useCreateProduct();
 </script>
 
 <template>
   <Layout>
+    <div
+      v-if="isLoading || !isMounted"
+      class="flex items-center justify-center"
+    >
+      <img src="/gifs/loading.gif" />
+    </div>
     <form
+      v-else
+      v-if="isSuccess"
       @submit="onSubmit"
       class="grid grid-cols-2 px-24 gap-4 big-h:grid-cols-1 avg-desk-for-view:px-8 avg-desk-for-view:grid-cols-1 items-start h-[calc(100vh-200px)]"
       novalidate
@@ -83,7 +94,7 @@ const {
                 :key="index"
                 class="bg-center bg-no-repeat bg-contain cursor-pointer"
                 :style="{
-                  backgroundImage: 'url(' + item.img + ')',
+                  backgroundImage: 'url(' + item + ')',
                 }"
               >
                 <div
@@ -107,6 +118,7 @@ const {
                   </label>
                   <button
                     @click="() => handleDelete(index)"
+                    type="button"
                     class="capitalize bg-opacity-70 bg-red-400 rounded p-2 mt-2 text-white"
                   >
                     remove
@@ -154,14 +166,13 @@ const {
             <div
               class="border-2 border-t-0 border-blue-400 py-1 flex items-center w-fit gap-3 av-desk:gap-[6px] rounded-b justify-center px-4"
             >
-              <div
+              <img
                 @click="goToSlide(index)"
                 v-for="(item, index) in images"
-                :style="{
-                  backgroundImage: 'url(' + item.img + ')',
-                }"
-                class="w-8 h-8 bg-center cursor-pointer bg-contain hover:scale-110 active:scale-125 bg-no-repeat"
-              ></div>
+                :src="item"
+                :key="item"
+                class="w-8 h-auto bg-center cursor-pointer bg-contain hover:scale-110 active:scale-125 bg-no-repeat"
+              />
               <div
                 v-if="images.length > 0 && images.length < 9 && !isDemo"
                 @click="goToSlide(images.length + 1)"
@@ -182,7 +193,7 @@ const {
       </div>
       <div class="relative">
         <div
-          class="flex text-xl items-center justify-between border-b-2 py-1 pb-2 border-black"
+          class="flex text-xl items-center avg-desk-for-view:pt-3 justify-between border-b-2 py-1 pb-2 border-black"
         >
           <h3
             v-if="name.value && name.value?.length > 0 && isDemo"
@@ -216,7 +227,7 @@ const {
           <textarea
             v-else
             v-bind="description"
-            class="w-full max-w-full scrollbar h-40 max-h-48 border-black border-2 p-1 outline-none text-base"
+            class="w-full scrollbar max-w-full h-40 max-h-48 border-black border-2 p-1 outline-none text-base"
           ></textarea>
           <div class="relative pb-4 bottom-1">
             <p
@@ -238,6 +249,7 @@ const {
                 type="number"
                 min="1"
                 max="100000"
+                step="any"
                 v-bind="price"
                 class="bg-transparent border-2 z-[3] w-32 font-sans border-black outline-none text-base px-1"
               />
@@ -297,27 +309,42 @@ const {
         <div class="flex flex-col gap-2 mt-3 mb-4">
           <button
             type="submit"
-            :disabled="isPending || isDemo"
-            class="bg-blue-400 hover:bg-blue-500 disabled:bg-blue-300 text-white py-2 rounded capitalize"
+            :disabled="isPending"
+            class="bg-blue-400 hover:bg-blue-500 text-white py-2 rounded capitalize"
           >
-            submit
+            save changes
           </button>
-          <button
-            type="button"
-            v-if="!isDemo"
-            @click="isDemo = true"
-            class="bg-blue-400 capitalize hover:bg-blue-500 px-2 py-[1px] text-base text-white rounded"
-          >
-            see demo
-          </button>
-          <button
-            type="button"
-            v-else
-            @click="isDemo = false"
-            class="bg-blue-400 capitalize hover:bg-blue-500 px-2 py-[1px] text-base text-white rounded"
-          >
-            edit
-          </button>
+          <div class="flex items-center w-full gap-2" v-if="!isDemo">
+            <button
+              type="button"
+              @click="isDemo = true"
+              class="bg-blue-400 capitalize w-1/2 hover:bg-blue-500 px-2 py-[2px] text-base text-white rounded"
+            >
+              see demo</button
+            ><button
+              type="button"
+              @click="$router.back()"
+              class="bg-red-400 capitalize w-1/2 hover:bg-red-500 px-2 py-[2px] text-base text-white rounded"
+            >
+              discard & go back
+            </button>
+          </div>
+          <div class="flex items-center w-full gap-2" v-else>
+            <button
+              type="button"
+              @click="isDemo = false"
+              class="bg-blue-400 w-1/2 capitalize hover:bg-blue-500 px-2 py-[1px] text-base text-white rounded"
+            >
+              edit
+            </button>
+            <button
+              type="button"
+              @click="$router.back()"
+              class="bg-red-400 capitalize w-1/2 hover:bg-red-500 px-2 py-[2px] text-base text-white rounded"
+            >
+              discard & go back
+            </button>
+          </div>
         </div>
       </div>
     </form>

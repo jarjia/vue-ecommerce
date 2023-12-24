@@ -59,7 +59,7 @@ defineProps({
             :key="index"
             class="bg-center bg-no-repeat bg-contain cursor-pointer"
             :style="{
-              backgroundImage: 'url(' + item.img + ')',
+              backgroundImage: 'url(' + item + ')',
             }"
           >
           </SwiperSlide>

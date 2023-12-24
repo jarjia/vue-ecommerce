@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import router from "@/routes";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  localStorage.removeItem("auth");
+});
 
 const handleRedirect = () => {
   localStorage.removeItem("auth");

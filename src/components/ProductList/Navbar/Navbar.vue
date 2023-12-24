@@ -1,13 +1,8 @@
 <script setup lang="ts">
-import { BurgerIcon, Cart } from "@/components";
+import { BurgerIcon, CartIcon } from "@/components";
+import { useAuthData } from "@/store";
 
-// const { mutate: logOutMutation } = useMutation({
-//   mutationFn: logOutUser,
-//   onSuccess() {
-//     localStorage.removeItem("auth");
-//     router.push("/login");
-//   },
-// });
+const cart = useAuthData();
 </script>
 
 <template>
@@ -19,25 +14,35 @@ import { BurgerIcon, Cart } from "@/components";
       @click="() => $router.push('/product-list')"
     >
       <img src="/images/logo.png" alt="logo" class="w-9 h-9" />
-      <p class="text-lg">Your Ecommerce</p>
+      <p class="text-lg mobile:hidden block">Your Ecommerce</p>
     </div>
     <div class="flex items-center justify-center gap-6 sm:hidden">
-      <RouterLink to="/profile" class="capitalize">profile</RouterLink>
+      <RouterLink to="/dashboard" class="capitalize">dashboard</RouterLink>
       <RouterLink to="/about-us" class="capitalize">about</RouterLink>
       <RouterLink to="/contact-us" class="capitalize">contact</RouterLink>
     </div>
     <div class="flex items-center justify-end gap-3">
-      <button class="hover:bg-gray-100 p-2 rounded-full">
+      <button
+        @click="$router.push('/cart')"
+        class="hover:bg-gray-100 p-2 rounded-full"
+      >
         <div class="relative bottom-2 left-4">
           <div
-            class="bg-red-500 py-[2px] select-none px-[8px] text-sm text-white rounded-full absolute"
+            :class="cart.cartItems === 0 ? 'py-0' : 'py-[2px]'"
+            class="bg-red-500 select-none px-[8px] text-sm text-white rounded-full absolute"
           >
-            3
+            {{
+              cart.cartItems > 99
+                ? "99+"
+                : cart.cartItems === 0
+                ? ""
+                : cart.cartItems
+            }}
           </div>
         </div>
-        <Cart />
+        <CartIcon />
       </button>
-      <button class="sm:block hidden">
+      <button @click="cart.setSideBar(true)" class="sm:block hidden">
         <BurgerIcon />
       </button>
     </div>
