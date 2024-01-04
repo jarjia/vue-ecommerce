@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { PlusIcon } from "@/components";
-import { Navigation, Pagination } from "swiper";
+import { Navigation, Pagination, Zoom } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "swiper/css/zoom";
 
-const modules = [Navigation, Pagination];
+const modules = [Navigation, Pagination, Zoom];
 
 defineProps({
   handleOffViewer: {
@@ -29,7 +30,7 @@ defineProps({
         handleOffViewer();
       }
     "
-    class="fixed h-screen w-screen sm:hidden block bg-[#13131ad2] z-[999]"
+    class="fixed h-screen w-screen sm:hidden block bg-[#13131ae1] z-[999]"
   >
     <button class="float-right rotate-45 m-6 z-[10]" @click="handleOffViewer()">
       <PlusIcon :isViewer="true" />
@@ -50,18 +51,20 @@ defineProps({
           :pagination="{ type: 'fraction' }"
           :navigation="true"
           :initialSlide="slide"
+          :zoom="true"
           class="w-full h-full"
           id="thumbnails"
           style="padding-bottom: 40px"
         >
-          <SwiperSlide
-            v-for="(item, index) in images"
-            :key="index"
-            class="bg-center bg-no-repeat bg-contain cursor-pointer"
-            :style="{
-              backgroundImage: 'url(' + item + ')',
-            }"
-          >
+          <SwiperSlide v-for="item in images" :key="item">
+            <div class="swiper-zoom-container">
+              <img
+                title="click twice to zoom"
+                :src="item"
+                :alt="item"
+                class="oveflow-visible scale-125 cursor-move"
+              />
+            </div>
           </SwiperSlide>
         </Swiper>
       </div>
