@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
 import { ref, watch } from "vue";
+import { numberWithCommas } from "@/helpers";
 import { deleteCartItem, updateCartQuantity } from "@/services";
 import { useAuthData } from "@/store";
 
@@ -145,7 +146,9 @@ const handleDelete = (cart_id: number) => {
         <h4 class="truncate max-w-4/5">
           {{ name }}
         </h4>
-        <p>${{ (parseFloat(price) * quantity).toFixed(2) }}</p>
+        <p>
+          ${{ numberWithCommas((parseFloat(price) * quantity).toFixed(2)) }}
+        </p>
       </div>
       <div class="flex items-center justify-between px-4 pt-6">
         <button

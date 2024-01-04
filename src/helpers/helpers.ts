@@ -10,7 +10,7 @@ export const isFreeProduct = (str: string) => {
   return /^[0.]+$/.test(str);
 };
 
-export const numberWithCommas = (number: number) => {
+export const numberWithCommas = (number: number | string) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
