@@ -50,6 +50,7 @@ const setupStripe = async () => {
         complete: "is-valid",
         empty: "is-empty",
         invalid: "is-invalid",
+        webkitAutofill: "form-fill",
       },
     });
 
@@ -314,5 +315,9 @@ const onSubmit = handleSubmit(async (values) => {
   border-radius: 5px !important;
   padding: 18px 20px;
   font-size: 14px;
+}
+.form-fill {
+  background-color: transparent !important;
+  color: black !important;
 }
 </style>
