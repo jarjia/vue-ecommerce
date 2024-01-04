@@ -26,7 +26,7 @@ export const style = {
       color: "#CFD7E0",
     },
     ":-webkit-autofill": {
-      color: "#fce883",
+      color: "black",
     },
     ":focus": {
       color: "#31325F",
