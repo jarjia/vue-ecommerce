@@ -3,7 +3,7 @@ import { Layout, ThumbnailViewer, TrashBinIcon, PenIcon } from "@/components";
 import router from "@/routes";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import useProductView from "./useProductView";
-import { isFreeProduct } from "@/helpers";
+import { isFreeProduct, numberWithCommas } from "@/helpers";
 
 const {
   handleOffViewer,
@@ -19,6 +19,7 @@ const {
   data,
   userData,
   isAlreadyInCart,
+  isOutOfStock,
   createCartItemMutation,
 } = useProductView();
 </script>
@@ -108,18 +109,20 @@ const {
             </button>
           </div>
         </div>
-        <div class="mt-1 min-h-[200px]">
+        <div class="mt-1">
           <h4 class="capitalize text-2xl text-center mb-1">
             product description
           </h4>
-          <p class="text-center">
+          <p
+            class="text-center whitespace-pre-line break-words w-full min-h-[150px] max-h-[150px] overflow-y-scroll scrollbar"
+          >
             {{ data.data.description }}
           </p>
         </div>
         <div class="flex mt-2 gap-4">
           <p>Price:</p>
           <span
-            >${{ data.data.price }}
+            >${{ numberWithCommas(data.data.price) }}
             <span class="pl-1">{{
               isFreeProduct(data.data.price) ? "(Free)" : ""
             }}</span>
@@ -142,11 +145,20 @@ const {
               })
             "
             :class="
-              isAlreadyInCart ? 'bg-red-400' : 'bg-blue-400 hover:bg-blue-500'
+              isAlreadyInCart || isOutOfStock
+                ? 'bg-red-400'
+                : 'bg-blue-400 hover:bg-blue-500'
             "
-            class="text-white py-2 rounded capitalize"
+            :disabled="data.data.quantity < 1"
+            class="text-white py-2 disabled:bg-blue-300 rounded capitalize"
           >
-            {{ isAlreadyInCart ? "already in cart!" : "add to cart" }}
+            {{
+              isOutOfStock
+                ? "Out of stock!"
+                : isAlreadyInCart
+                ? "already in cart!"
+                : "add to cart"
+            }}
           </button>
           <button
             @click="router.back()"

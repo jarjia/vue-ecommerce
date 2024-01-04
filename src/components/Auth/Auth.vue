@@ -133,6 +133,7 @@ const onSubmit = handleSubmit((values) => {
         </div>
         <div>
           <Select
+            :isCheckout="false"
             :value="(country as string)"
             label="Country of residence"
             :setCountry="setCountry"
@@ -140,6 +141,7 @@ const onSubmit = handleSubmit((values) => {
           />
           <input type="hidden" name="country" v-model="country" />
           <SelectForCity
+            :isCheckout="false"
             :value="(city as string)"
             label="City of residence"
             :setCity="setCity"

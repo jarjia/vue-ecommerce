@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { BurgerIcon, CartIcon } from "@/components";
 import { useAuthData } from "@/store";
+import { useQuery } from "@tanstack/vue-query";
+import { getCartCount } from "@/services";
+import router from "@/routes";
 
 const cart = useAuthData();
+
+const { data } = useQuery({
+  queryKey: ["cart-count"],
+  queryFn: getCartCount,
+});
 </script>
 
 <template>
@@ -11,7 +19,16 @@ const cart = useAuthData();
   >
     <div
       class="flex items-center gap-2 cursor-pointer w-fit"
-      @click="() => $router.push('/product-list')"
+      @click="
+        () =>
+          router.push({
+            path: '/product-list',
+            query:
+              router.currentRoute.value.name === 'product-list'
+                ? { ...router.currentRoute.value.query }
+                : {},
+          })
+      "
     >
       <img src="/images/logo.png" alt="logo" class="w-9 h-9" />
       <p class="text-lg mobile:hidden block">Your Ecommerce</p>
@@ -28,16 +45,10 @@ const cart = useAuthData();
       >
         <div class="relative bottom-2 left-4">
           <div
-            :class="cart.cartItems === 0 ? 'py-0' : 'py-[2px]'"
+            :class="data?.data > 0 ? 'py-[2px]' : 'py-0'"
             class="bg-red-500 select-none px-[8px] text-sm text-white rounded-full absolute"
           >
-            {{
-              cart.cartItems > 99
-                ? "99+"
-                : cart.cartItems === 0
-                ? ""
-                : cart.cartItems
-            }}
+            {{ 2 > 99 ? "99+" : data?.data === 0 ? "" : data?.data }}
           </div>
         </div>
         <CartIcon />

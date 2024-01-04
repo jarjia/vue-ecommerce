@@ -6,8 +6,6 @@ const timeOut = (callback: any) => {
   }
 
   setTimeout(() => {
-    console.log("jarji");
-
     callback();
   }, 2000);
 };

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 defineProps({
   isProduct: Boolean,
+  isPaginate: Boolean,
 });
 </script>
 

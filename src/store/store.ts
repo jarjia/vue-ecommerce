@@ -6,7 +6,6 @@ export const useAuthData = defineStore("auth", {
     cities: string[];
     userData: null | UserData;
     totalCartPrice: number;
-    cartItems: number;
     sideBar: boolean;
   } => {
     return {
@@ -16,24 +15,12 @@ export const useAuthData = defineStore("auth", {
           ? JSON.parse(sessionStorage.getItem("user-data") as string)
           : null,
       totalCartPrice: 0,
-      cartItems:
-        localStorage.getItem("cart") !== null
-          ? JSON.parse(localStorage.getItem("cart") as string)
-          : 0,
       sideBar: false,
     };
   },
   actions: {
     setSideBar(boolean: boolean) {
       this.sideBar = boolean;
-    },
-    setInitialCartItems(itemsLength: number) {
-      this.cartItems = itemsLength;
-      localStorage.setItem("cart", JSON.stringify(itemsLength));
-    },
-    setCartItems(itemsLength: number) {
-      this.cartItems += itemsLength;
-      localStorage.setItem("cart", JSON.stringify(this.cartItems));
     },
     setCities(cities: string[]) {
       this.cities = cities;

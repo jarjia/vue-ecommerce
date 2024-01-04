@@ -28,9 +28,6 @@ const useCreateProduct = () => {
 
   const { mutate: createProductMutation, isPending } = useMutation({
     mutationFn: createProduct,
-    onError(err) {
-      console.log(err);
-    },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["products"], exact: true });
       router.push("/dashboard");

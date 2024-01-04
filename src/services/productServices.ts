@@ -14,12 +14,18 @@ export const createProduct = (data: CreateProduct) => {
 export const getProducts = (filters: Filters) => {
   return axiosInstance.get("/api/products", {
     params: filters,
+    headers: {
+      "X-Xsrf-Token": Cookies.get("XSRF-TOKEN"),
+    },
   });
 };
 
 export const getUserProducts = (filters: Filters) => {
   return axiosInstance.get("/api/products/user", {
     params: filters,
+    headers: {
+      "X-Xsrf-Token": Cookies.get("XSRF-TOKEN"),
+    },
   });
 };
 

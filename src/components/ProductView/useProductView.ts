@@ -1,3 +1,4 @@
+import { loadImage } from "@/helpers";
 import router from "@/routes";
 import { getProduct, destroyProduct } from "@/services";
 import { createCartItem } from "@/services/cartService";
@@ -14,6 +15,7 @@ const useProductView = () => {
   const cart = useAuthData();
 
   const isAlreadyInCart = ref(false);
+  const isOutOfStock = ref(false);
 
   const { data, isLoading } = useQuery({
     queryFn: () =>
@@ -24,7 +26,12 @@ const useProductView = () => {
   const { mutate: createCartItemMutation } = useMutation({
     mutationFn: createCartItem,
     onSuccess() {
-      cart.setCartItems(1);
+      setTimeout(() => {
+        queryClient.invalidateQueries({
+          queryKey: ["cart-count"],
+          exact: true,
+        });
+      }, 200);
     },
     onError(err: any) {
       if (err.response.status === 403) {
@@ -33,14 +40,21 @@ const useProductView = () => {
           isAlreadyInCart.value = false;
         }, 2500);
       }
+      if (err.response.status === 400) {
+        isOutOfStock.value = true;
+        setTimeout(() => {
+          isOutOfStock.value = false;
+        }, 2500);
+      }
     },
   });
 
   const { mutate: deleteProductMutation } = useMutation({
     mutationFn: destroyProduct,
-    onSuccess() {
+    onSuccess(data) {
+      loadImage(data.data.thumbnails);
       queryClient.invalidateQueries({ queryKey: ["products"], exact: true });
-      router.push("/profile");
+      router.push("/dashboard");
     },
   });
 
@@ -83,6 +97,7 @@ const useProductView = () => {
     isLoading,
     handleThumbnailViewer,
     isAlreadyInCart,
+    isOutOfStock,
     modules,
     onSwiper,
     deleteProductMutation,

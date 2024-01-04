@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
 import useCreateProduct from "./useCreateProduct";
+import { numberWithCommas } from "@/helpers";
 import { Layout, ImageIcon, PlusIcon } from "@/components";
 
 const {
@@ -231,7 +232,7 @@ const {
           <div class="flex gap-4">
             <p>Price:</p>
           </div>
-          <p v-if="isDemo">${{ price.value }}</p>
+          <p v-if="isDemo">${{ numberWithCommas(price.value as number) }}</p>
           <div v-else class="relative w-full bottom-3">
             <div class="flex items-center gap-2 absolute">
               <input

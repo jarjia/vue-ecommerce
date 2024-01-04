@@ -2,13 +2,6 @@
 import router from "@/routes";
 import { onBeforeMount } from "vue";
 import { loadImage } from "@/helpers";
-import { useQuery } from "@tanstack/vue-query";
-import { getCrsfToken } from "@/services";
-
-useQuery({
-  queryKey: ["csrf-token"],
-  queryFn: getCrsfToken,
-});
 
 onBeforeMount(() => {
   loadImage(["/images/form.png"]);

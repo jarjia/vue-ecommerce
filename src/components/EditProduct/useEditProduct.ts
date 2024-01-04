@@ -68,9 +68,6 @@ const useEditProduct = () => {
 
   const { mutate: editProductMutation, isPending } = useMutation({
     mutationFn: editProduct,
-    onError(err) {
-      console.log(err);
-    },
     onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["products"], exact: true });
       queryClient.invalidateQueries({

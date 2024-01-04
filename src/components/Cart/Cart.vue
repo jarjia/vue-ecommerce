@@ -30,10 +30,11 @@ const { data, isLoading, isPending, isDeleting, handleEmptyCart } = useCart();
           :quantity="item.quantity"
           :maxQuantity="item.product_quantity"
           :cart_id="item.id"
+          :product_id="item.product_id"
         />
       </div>
       <div v-else class="m-auto text-center py-20 text-2xl">
-        <p>No items in the cart...</p>
+        <p>No products in the cart...</p>
       </div>
     </div>
   </Layout>

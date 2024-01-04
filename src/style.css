@@ -90,3 +90,32 @@ img {
     left: 0;
   }
 }
+
+#no-number-btns::-webkit-outer-spin-button,
+#no-number-btns::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+#no-number-btns {
+  -moz-appearance: textfield;
+}
+
+.pagination:last-child {
+  border-right: none !important;
+}
+.paginate:disabled svg path {
+  fill: gray !important;
+}
+
+button:active {
+  user-select: none;
+}
+
+.svg-shadow {
+  filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
+}
+.message-rotate {
+  transform: rotate3d(0, 1, 0, 180deg);
+}

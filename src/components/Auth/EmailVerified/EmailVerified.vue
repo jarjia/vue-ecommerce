@@ -21,7 +21,7 @@ defineProps({
   </div>
   <img src="/images/mail.png" class="w-[200px] h-[200px]" />
   <div class="text-center">
-    <p>Your email was verified!</p>
+    <p>Your email is verified!</p>
     <p>You can now log in.</p>
   </div>
   <button

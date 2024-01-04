@@ -101,3 +101,13 @@ export const editProductSchema = toTypedSchema(
     files: zod.any().optional(),
   })
 );
+
+export const checkoutSchema = toTypedSchema(
+  zod.object({
+    country: zod
+      .string()
+      .min(1, { message: "Please enter country of residence" }),
+    city: zod.string().min(1, { message: "Please enter city of residence" }),
+    address: zod.string().min(1, { message: "Please enter your address" }),
+  })
+);

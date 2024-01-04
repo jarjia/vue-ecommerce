@@ -8,6 +8,9 @@ import {
   ProductView,
   EditProduct,
   Cart,
+  AboutUs,
+  ContactUs,
+  Checkout,
 } from "./components";
 
 const routes = [
@@ -56,6 +59,21 @@ const routes = [
     path: "/cart",
     name: "cart",
     component: Cart,
+  },
+  {
+    path: "/about-us",
+    name: "about us",
+    component: AboutUs,
+  },
+  {
+    path: "/contact-us",
+    name: "contact us",
+    component: ContactUs,
+  },
+  {
+    path: "/checkout",
+    name: "checkout",
+    component: Checkout,
   },
 ];
 

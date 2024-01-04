@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/vue-query";
 import { postLoginUser, postSendVerify } from "@/services";
 import router from "@/routes";
 import { ref } from "vue";
+import { getCrsfToken } from "@/services";
 
 const initialValues = {
   email: "",
@@ -40,7 +41,8 @@ const { mutate: loginMutation, isPending } = useMutation({
   },
 });
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async (values) => {
+  await getCrsfToken();
   loginMutation(values);
 });
 </script>

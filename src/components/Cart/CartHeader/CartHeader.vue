@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useAuthData } from "@/store";
-
-const cart = useAuthData();
+import { numberWithCommas } from "@/helpers";
 
 defineProps({
   onDeleteCartItemsMutation: {
@@ -13,6 +12,8 @@ defineProps({
     default: true,
   },
 });
+
+const cart = useAuthData();
 </script>
 
 <template>
@@ -25,11 +26,12 @@ defineProps({
       remove all
     </button>
     <button
+      @click="$router.push('/checkout')"
       :disabled="quantity === 0"
       class="capitalize text-white bg-blue-400 disabled:bg-blue-300 py-2 px-4 rounded"
     >
       checkout <span class="pr-[1px]">(</span>${{
-        cart.totalCartPrice.toFixed(2)
+        numberWithCommas(parseFloat(cart.totalCartPrice.toFixed(2)))
       }}<span class="pl-[1px]">)</span>
     </button>
   </div>

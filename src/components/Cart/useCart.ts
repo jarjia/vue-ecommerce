@@ -17,7 +17,6 @@ const useCart = () => {
 
   watch(dataRef, (newData) => {
     cart.setInitialCartPrice(newData?.data.total);
-    cart.setInitialCartItems(newData?.data.main_data.length);
   });
 
   const { mutate: deleteCartItemsMutation, isPending } = useMutation({

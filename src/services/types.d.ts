@@ -8,6 +8,7 @@ export type CreateProduct = {
 export type Filters = {
   sort: string | null;
   search: string | null;
+  pageParam: number | null;
 };
 export type AddCart = {
   seller_id: number;

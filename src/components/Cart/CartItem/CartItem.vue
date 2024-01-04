@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { deleteCartItem, updateCartQuantity } from "@/services";
 import { useAuthData } from "@/store";
 
@@ -26,6 +26,10 @@ const props = defineProps({
     type: Number,
     default: true,
   },
+  product_id: {
+    type: Number,
+    default: true,
+  },
 });
 
 const isDeleting = ref(false);
@@ -47,6 +51,29 @@ const { mutate: changeQuantityMutation } = useMutation({
 });
 
 let quantityTimeout: NodeJS.Timeout | null = null;
+
+watch(quantity, (newVal) => {
+  if (typeof newVal === "string") {
+    quantity.value = 1;
+  }
+  if (newVal < 0) {
+    quantity.value = 1;
+  }
+  if (newVal > props.maxQuantity) {
+    quantity.value = props.maxQuantity;
+  }
+  if (typeof newVal !== "string") {
+    if (quantityTimeout) {
+      clearTimeout(quantityTimeout);
+    }
+    quantityTimeout = setTimeout(() => {
+      changeQuantityMutation({
+        quantity: quantity.value,
+        cart_id: props.cart_id,
+      });
+    }, 500);
+  }
+});
 
 const handleQuantityIncrease = (definedNumber: number) => {
   if (quantity.value + 1 <= definedNumber) {
@@ -107,13 +134,17 @@ const handleDelete = (cart_id: number) => {
     </div>
     <template v-else>
       <div
-        class="w-full h-[70%] bg-contain bg-no-repeat bg-center"
+        :title="`view product: ${name}`"
+        @click="$router.push(`/product-view/${product_id}`)"
+        class="w-full h-[70%] cursor-pointer bg-contain bg-no-repeat bg-center"
         :style="{
           backgroundImage: 'url(' + thumbnail + ')',
         }"
       ></div>
       <div class="flex justify-between px-4">
-        <h4>{{ name }}</h4>
+        <h4 class="truncate max-w-4/5">
+          {{ name }}
+        </h4>
         <p>${{ (parseFloat(price) * quantity).toFixed(2) }}</p>
       </div>
       <div class="flex items-center justify-between px-4 pt-6">
@@ -123,14 +154,22 @@ const handleDelete = (cart_id: number) => {
         >
           remove
         </button>
-        <div class="grid grid-cols-[30px_30px_30px]">
+        <div class="grid grid-cols-[30px_40px_30px]">
           <button
             @click="handleQuantityDecrease"
             class="hover:bg-gray-100 rounded"
           >
             -
           </button>
-          <p class="text-center">{{ quantity }}</p>
+          <input
+            type="number"
+            id="no-number-btns"
+            min="1"
+            class="text-center w-auto outline-none"
+            :max="maxQuantity"
+            v-model="quantity"
+            autocomplete="off"
+          />
           <button
             @click="handleQuantityIncrease(maxQuantity)"
             class="hover:bg-gray-100 rounded"

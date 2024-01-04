@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loadImage, isFreeProduct } from "@/helpers";
+import { isFreeProduct, numberWithCommas } from "@/helpers";
 import router from "@/routes";
 
 const props = defineProps({
@@ -16,8 +16,6 @@ const props = defineProps({
     default: true,
   },
 });
-
-loadImage(props.thumbnails as string[]);
 </script>
 
 <template>
@@ -25,7 +23,12 @@ loadImage(props.thumbnails as string[]);
     :style="{
       backgroundImage: 'url(' + mainImage + ')',
     }"
-    class="grid grid-rows-[65%_35%] bg-center bg-contain bg-no-repeat h-[250px] shadow-xl rounded-xl"
+    :class="
+      router.currentRoute.value.name === 'dashboard'
+        ? 'avg-desk-for-view:h-[350px]'
+        : 'avg-desk-for-view:h-[250px]'
+    "
+    class="grid grid-rows-[65%_35%] bg-[50%_0%] bg-contain bg-no-repeat h-[250px] sm-mobile:h-[250px] shadow-xl rounded-xl"
   >
     <div class="relative">
       <div class="absolute right-0 m-2">
@@ -48,7 +51,11 @@ loadImage(props.thumbnails as string[]);
           }}
         </p>
         <p class="text-white capitalize">
-          {{ isFreeProduct(props.price) ? "free" : "$" + price }}
+          {{
+            isFreeProduct(props.price)
+              ? "free"
+              : "$" + numberWithCommas(parseFloat(price))
+          }}
         </p>
       </div>
       <button

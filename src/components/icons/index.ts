@@ -8,3 +8,7 @@ export * from "./PlusIcon";
 export * from "./TrashBinIcon";
 export * from "./PenIcon";
 export * from "./ImageIcon";
+export * from "./TriangleIcon";
+export * from "./MessageIcon";
+export * from "./ArrowIcon";
+export * from "./XIcon";

@@ -22,11 +22,14 @@ const { isSuccess, isLoading, data } = useQuery({
 
 watch(isSuccess, (newVal) => {
   if (newVal) {
-    const { name, email, id } = data.value?.data;
+    const { name, email, id, address, country, city } = data.value?.data;
     let userData = {
       name,
       email,
       id,
+      address,
+      city,
+      country,
     };
     setUserData(userData);
   }

@@ -12,6 +12,7 @@ export default {
         "avg-desk-for-view": { max: "1037px" },
         mobile: { max: "660px" },
         "big-h": { raw: "(min-height: 940px)" },
+        "sm-mobile": { max: "412px" },
       },
     },
   },
@@ -20,7 +21,7 @@ export default {
       addBase({
         ".scrollbar": {
           overflowY: "auto",
-          scrollbarColor: `#808189e5 transparent`,
+          scrollbarColor: `#9FA0A7 transparent`,
           scrollbarWidth: "auto",
         },
         ".scrollbar::-webkit-scrollbar": {
@@ -28,7 +29,7 @@ export default {
           width: "6px",
         },
         ".scrollbar::-webkit-scrollbar-thumb": {
-          backgroundColor: "#808189e5",
+          backgroundColor: "#9FA0A7",
           borderRadius: "50px",
         },
       });

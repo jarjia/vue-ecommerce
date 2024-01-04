@@ -43,7 +43,11 @@ export const postLoginUser = (loginCredentials: any) => {
 };
 
 export const getUserData = () => {
-  return axiosInstance.get("/api/user");
+  return axiosInstance.get("/api/user", {
+    headers: {
+      "X-Xsrf-Token": Cookies.get("XSRF-TOKEN"),
+    },
+  });
 };
 
 export const logOutUser = () => {

@@ -1,97 +1,36 @@
 <script setup lang="ts">
-import router from "@/routes";
-import { getProducts, getUserProducts } from "@/services";
-import { sorts } from "@/helpers";
-import { useQuery } from "@tanstack/vue-query";
-import { onBeforeUnmount, onMounted, ref } from "vue";
-import { Product, SearchIcon, DropDownIcon, PlusIcon } from "@/components";
+import useSharedProducts from "./useSharedProducts";
+import {
+  Product,
+  PlusIcon,
+  DropDownIcon,
+  SearchIcon,
+  XIcon,
+} from "@/components";
 
 defineProps({
   isProfile: Boolean,
 });
 
-const { data, isLoading, refetch } = useQuery({
-  queryKey:
-    router.currentRoute.value.name === "dashboard"
-      ? ["user-products"]
-      : ["products"],
-  queryFn:
-    router.currentRoute.value.name === "dashboard"
-      ? () =>
-          getUserProducts({
-            sort: router.currentRoute.value.query.sort as string,
-            search: (router.currentRoute.value.query.search as string) || "",
-          })
-      : () =>
-          getProducts({
-            sort: router.currentRoute.value.query.sort as string,
-            search: (router.currentRoute.value.query.search as string) || "",
-          }),
-});
-
-const isSort = ref(false);
-const search = ref(router.currentRoute.value.query.search || "");
-
-const sort = ref(
-  router.currentRoute.value.query.sort
-    ? router.currentRoute.value.query.sort
-    : sorts[0]
-);
-
-const close = (e: MouseEvent) => {
-  const targetElement = e.target as Element;
-
-  if (!targetElement.closest(".sort-drop")) {
-    isSort.value = false;
-  } else {
-    let obj = document.getElementById("search") as HTMLElement;
-    obj.focus();
-  }
-};
-
-const changeSort = (sortItem: string) => {
-  isSort.value = false;
-  sort.value = sortItem;
-  if (router.currentRoute.value.query.sort !== sortItem) {
-    if (sortItem !== "no sorting") {
-      router.push({
-        query: { ...router.currentRoute.value.query, sort: sortItem },
-      });
-      setTimeout(() => {
-        refetch();
-      }, 300);
-    } else {
-      if (router.currentRoute.value.query.sort) {
-        router.push("/product-list");
-        setTimeout(() => {
-          refetch();
-        }, 300);
-      }
-    }
-  }
-};
-
-const handleSearch = () => {
-  if (search.value !== router.currentRoute.value.query.search) {
-    setTimeout(() => {
-      refetch();
-    }, 300);
-    router.push({
-      query: {
-        ...router.currentRoute.value.query,
-        search: search.value,
-      },
-    });
-  }
-};
-
-onMounted(() => {
-  document.addEventListener("click", close);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener("click", close);
-});
+const {
+  search,
+  data,
+  isLoading,
+  isRefetching,
+  sort,
+  isSort,
+  page,
+  sorts,
+  router,
+  isFetchingNextPage,
+  isFetchingPreviousPage,
+  paginating,
+  handleCustomPage,
+  handleNext,
+  changeSort,
+  handleSearch,
+  handlePrev,
+} = useSharedProducts();
 </script>
 
 <template>
@@ -115,6 +54,19 @@ onBeforeUnmount(() => {
         <div class="relative bottom-3 right-[32px]">
           <SearchIcon class="absolute" />
         </div>
+        <button
+          v-if="search.length > 0 && $router.currentRoute.value.query.search"
+          @click="
+            () => {
+              search = '';
+              handleSearch();
+            }
+          "
+          title="clear search"
+          class="mx-2 text-xl"
+        >
+          <XIcon />
+        </button>
       </div>
       <div class="flex flex-col justify-center">
         <button
@@ -153,37 +105,101 @@ onBeforeUnmount(() => {
     </div>
   </div>
   <div
-    class="py-4"
-    v-if="data?.data.length > 0"
-    :class="
-      isProfile
-        ? 'grid grid-cols-3 mini-desk:grid-cols-1 medium-desk:grid-cols-2 auto-cols-auto gap-2 px-1 justify-center'
-        : 'grid grid-cols-4 gap-10 px-16 av-desk:grid-cols-3 mini-desk:grid-cols-2 mobile:grid-cols-1 mini-desk:px-8'
+    v-if="isLoading || isFetchingNextPage || isFetchingPreviousPage"
+    class="flex items-center justify-center"
+  >
+    <img src="/gifs/loading.gif" />
+  </div>
+  <template
+    v-else-if="
+      data?.pages[data.pageParams.indexOf(page)]?.data.products.length > 0
     "
   >
     <div
-      v-if="isProfile"
-      title="Add product"
-      @click="router.push('/product/create')"
-      class="h-[250px] flex cursor-pointer active:shadow-none active:translate-x-[-2px] active:translate-y-[2px] justify-center items-center shadow-xl rounded-xl"
+      class="py-4"
+      :class="
+        isProfile
+          ? 'grid grid-cols-3 mini-desk:grid-cols-1 medium-desk:grid-cols-2 auto-cols-auto gap-2 px-1 justify-center'
+          : 'grid grid-cols-4 gap-10 px-16 av-desk:grid-cols-3 mini-desk:grid-cols-2 mobile:grid-cols-1 mini-desk:px-8'
+      "
     >
-      <PlusIcon :isViewer="false" />
+      <div
+        v-if="isProfile"
+        title="Add product"
+        @click="router.push('/product/create')"
+        class="h-[250px] sm-mobile:h-[250px] avg-desk-for-view:h-[350px] flex cursor-pointer active:shadow-none active:translate-x-[-2px] active:translate-y-[2px] justify-center items-center shadow-xl rounded-xl"
+      >
+        <PlusIcon :isViewer="false" />
+      </div>
+      <Product
+        v-for="item in data?.pages[data.pageParams.indexOf(page)].data.products"
+        :key="item.id"
+        :id="item.id"
+        :name="item.name"
+        :price="item.price"
+        :mainImage="item.mainImage"
+        :thumbnails="item.thumbnails"
+        :isInStock="item.isInStock"
+      />
     </div>
-    <Product
-      v-for="item in data?.data"
-      :key="item.id"
-      :id="item.id"
-      :name="item.name"
-      :price="item.price"
-      :mainImage="item.mainImage"
-      :thumbnails="item.thumbnails"
-      :isInStock="item.isInStock"
-    />
-  </div>
-  <div v-else-if="isLoading" class="flex items-center justify-center">
-    <img src="/gifs/loading.gif" />
-  </div>
-  <div v-else>
+    <div class="flex justify-center gap-2 my-4">
+      <button
+        :disabled="
+          (paginating && isRefetching) ||
+          isLoading ||
+          paginating ||
+          !page ||
+          page === 1
+        "
+        @click="handlePrev"
+        class="capitalize rotate-90 paginate"
+      >
+        <DropDownIcon :isProduct="false" />
+      </button>
+      <div>
+        <button
+          :disabled="
+            paginating ||
+            isRefetching ||
+            isLoading ||
+            pageItem === page ||
+            (!page && pageItem === 1)
+          "
+          class="border-r-[1px] pagination px-2 border-gray-400"
+          v-for="pageItem in Array.from(
+            {
+              length: data?.pages[data.pageParams.indexOf(page)].data.all_pages,
+            },
+            (_, index) => index + 1
+          )"
+          @click="handleCustomPage(pageItem)"
+          :style="{
+            color:
+              pageItem === page || (!page && pageItem === 1) ? 'gray' : 'black',
+          }"
+        >
+          {{ pageItem }}
+        </button>
+      </div>
+      <button
+        :disabled="
+          paginating ||
+          (paginating && isRefetching) ||
+          isLoading ||
+          page === data?.pages[data.pageParams.indexOf(page)].data.all_pages ||
+          (data?.pages[data.pageParams.indexOf(page)].data.all_pages === 1 &&
+            page === null)
+        "
+        @click="handleNext"
+        class="capitalize rotate-[270deg] paginate"
+      >
+        <DropDownIcon :isProduct="false" />
+      </button>
+    </div>
+  </template>
+  <div
+    v-if="data?.pages[data.pageParams.indexOf(page)]?.data.products.length < 1"
+  >
     <div v-if="isProfile" class="flex items-center mini-desk:flex-col">
       <img
         src="/images/no-product-profile.webp"
@@ -206,12 +222,16 @@ onBeforeUnmount(() => {
       />
       <div class="py-20 sm:py-4 sm:text-center">
         <h3 class="text-3xl">No products found...</h3>
-        <p class="text-md mt-4">
+        <p
+          v-if="!$router.currentRoute.value.query.p || page === 1"
+          class="text-md mt-4"
+        >
           You can add your products from the
           <RouterLink to="/dashboard" class="text-blue-400"
-            >Profile!</RouterLink
+            >dashboard!</RouterLink
           >
         </p>
+        <p class="text-md mt-4" v-else>Page does not exist</p>
       </div>
     </div>
   </div>

@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { Ref, onBeforeUnmount, onMounted, ref } from "vue";
+import { Ref, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { ErrorMessage } from "vee-validate";
 import { useAuthData } from "@/store";
 import { DropDownIcon } from "@/components";
 
 const auth = useAuthData();
 
-let searchDropDown_1: Ref<string> = ref("");
-let showDropDown: Ref<boolean> = ref(false);
-let justRef: any = ref();
+const searchDropDown_1: Ref<string> = ref("");
+const showDropDown: Ref<boolean> = ref(false);
+const cityRef = ref<null | HTMLDivElement>(null);
+const perCities = ref(300);
 
 let props = defineProps({
+  isCheckout: {
+    type: Boolean,
+    default: true,
+  },
   setCity: {
     type: Function,
     default: true,
@@ -48,6 +53,27 @@ const close = (e: MouseEvent) => {
   }
 };
 
+const handleScroll = () => {
+  if (cityRef.value !== null) {
+    const scrollTop = cityRef.value.scrollTop;
+    const clientHeight = cityRef.value.clientHeight;
+    const scrollHeight = cityRef.value.scrollHeight;
+
+    const isAtBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 1;
+
+    if (isAtBottom) perCities.value += perCities.value * 2;
+  }
+};
+
+watch(cityRef, (newVal) => {
+  if (newVal !== null) {
+    newVal.addEventListener("scroll", handleScroll);
+    if (!showDropDown.value) {
+      newVal.removeEventListener("scroll", handleScroll);
+    }
+  }
+});
+
 onMounted(() => {
   document.addEventListener("click", close);
 });
@@ -58,8 +84,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="flex flex-col mt-3 min-w-[350px]">
+  <div
+    class="flex flex-col min-w-[350px]"
+    :class="isCheckout ? 'mt-0' : 'mt-3'"
+  >
+    <label v-if="isCheckout">City of residence</label>
     <label
+      v-else
       class="relative z-[2] transition-all"
       :class="value.length > 0 ? 'top-1 left-0' : 'top-[35px] left-2'"
       >{{
@@ -75,22 +106,38 @@ onBeforeUnmount(() => {
             ? false
             : !showDropDown
       "
-      class="flex px-2 justify-between items-center select-none cursor-default your-dropdown-container-1 h-[36px] auth-autofill mt-1 bg-transparent border-2 z-[3] border-black outline-none py-1"
+      class="flex justify-between items-center select-none cursor-default your-dropdown-container-1 h-[36px] auth-autofill mt-1 bg-transparent z-[3] outline-none"
+      :class="
+        isCheckout
+          ? 'border-[1px] border-[#e8e8e8] rounded-[5px] py-[26px] px-[20px]'
+          : 'border-2 border-black py-1 px-2'
+      "
     >
-      <p>{{ value.length > 0 ? value : "" }}</p>
+      <p>
+        {{
+          value.length > 0
+            ? value
+            : isCheckout
+            ? country.length > 0 && auth.$state.cities.length === 0
+              ? "Loading..."
+              : props.label
+            : ""
+        }}
+      </p>
       <DropDownIcon :isProduct="false" />
     </div>
     <div v-if="showDropDown" class="relative">
       <div
-        class="absolute z-[5] scrollbar bg-[#dbe7ff] bg-opacity-[0.91] w-full max-h-[200px] overflow-y-auto"
-        ref="justRef"
+        class="absolute z-[51] scrollbar shadow-2xl w-full max-h-[200px] overflow-y-auto"
+        :class="isCheckout ? 'bg-white' : 'bg-opacity-[0.91] bg-[#dbe7ff]'"
+        ref="cityRef"
       >
         <div
           v-if="auth.$state.cities.length > 0"
           class="px-2 py-[2px] cursor-pointer hover:bg-blue-400 hover:text-white"
           v-for="residence in auth.$state.cities.filter((item: string) =>
             item.toLowerCase().includes(searchDropDown_1.toLowerCase())
-          )"
+          ).slice(0, perCities)"
           @click="() => setCity(residence)"
         >
           {{ residence }}
