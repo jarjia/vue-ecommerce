@@ -52,8 +52,8 @@ const useCreateProduct = () => {
       if (newVal.value < 0) {
         setFieldValue("price", 0);
       }
-      if (newVal.value > 100000) {
-        setFieldValue("price", 100000);
+      if (newVal.value > 100000000) {
+        setFieldValue("price", 100000000);
       }
     }
   });

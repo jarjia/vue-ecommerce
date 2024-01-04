@@ -41,6 +41,7 @@ const isOrder = ref(false);
           :created_at="order.created_at"
           :name="order.name"
           :price="order.price"
+          :mainImage="order.mainImage"
           :id="order.id"
         />
         <p v-else class="text-center py-8">No orders for now...</p>
@@ -71,6 +72,7 @@ const isOrder = ref(false);
               :name="order.name"
               :price="order.price"
               :id="order.id"
+              :mainImage="order.mainImage"
             />
 
             <p v-else class="text-center">No orders for now...</p>

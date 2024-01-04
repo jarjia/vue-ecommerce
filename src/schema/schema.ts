@@ -60,7 +60,7 @@ export const createProductSchema = toTypedSchema(
     price: zod
       .number()
       .min(0, "Product Price is required")
-      .max(100000, "Product Price must be less than 100000$"),
+      .max(100000000, "Product Price must be less than 100000000$"),
     description: zod
       .string()
       .min(1, {
@@ -90,7 +90,7 @@ export const editProductSchema = toTypedSchema(
     price: zod
       .number()
       .min(0, "Product Price is required")
-      .max(100000, "Product Price must be less than 100000$"),
+      .max(100000000, "Product Price must be less than $100000000"),
     description: zod
       .string()
       .min(1, {

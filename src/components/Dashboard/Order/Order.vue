@@ -17,6 +17,10 @@ defineProps({
     type: String,
     default: true,
   },
+  mainImage: {
+    type: String,
+    default: true,
+  },
   price: {
     type: Number,
     default: true,
@@ -41,7 +45,7 @@ defineProps({
     class="flex items-center justify-center bg-[#EDEDED] w-full rounded-xl p-2 gap-2"
   >
     <div class="flex flex-col justify-center items-center">
-      <img src="/images/logo.png" class="max-w-[70px] max-h-[70px]" />
+      <img :src="mainImage" class="max-w-[70px] max-h-[70px]" />
       <p class="text-[12px] mt-1 truncate">${{ numberWithCommas(price) }}</p>
     </div>
     <div class="flex flex-col gap-1">
