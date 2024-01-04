@@ -62,7 +62,7 @@ defineProps({
                 title="click twice to zoom"
                 :src="item"
                 :alt="item"
-                class="oveflow-visible scale-125 cursor-move"
+                class="cursor-move"
               />
             </div>
           </SwiperSlide>
