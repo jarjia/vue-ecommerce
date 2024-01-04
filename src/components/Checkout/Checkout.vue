@@ -319,5 +319,6 @@ const onSubmit = handleSubmit(async (values) => {
 .form-fill {
   background-color: transparent !important;
   color: black !important;
+  -webkit-text-fill-color: black !important;
 }
 </style>
