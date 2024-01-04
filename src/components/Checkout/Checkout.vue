@@ -180,6 +180,7 @@ const onSubmit = handleSubmit(async (values) => {
       </div>
     </div>
     <div
+      id="checkout"
       class="grid grid-cols-2 gap-8 px-10 avg-desk-for-view:px-2 avg-desk-for-view:gap-4 sm:grid-cols-1"
     >
       <div>
