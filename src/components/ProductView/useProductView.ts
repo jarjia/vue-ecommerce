@@ -1,4 +1,3 @@
-import { loadImage } from "@/helpers";
 import router from "@/routes";
 import { getProduct, destroyProduct } from "@/services";
 import { createCartItem } from "@/services/cartService";
@@ -51,8 +50,7 @@ const useProductView = () => {
 
   const { mutate: deleteProductMutation } = useMutation({
     mutationFn: destroyProduct,
-    onSuccess(data) {
-      loadImage(data.data.thumbnails);
+    onSuccess() {
       queryClient.invalidateQueries({ queryKey: ["products"], exact: true });
       router.push("/dashboard");
     },
