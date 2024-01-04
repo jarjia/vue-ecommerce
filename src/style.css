@@ -22,7 +22,7 @@ body {
 
 #checkout input {
   background: transparent !important;
-  -webkit-text-fill-color: inherit !important;
+  -webkit-text-fill-color: black !important;
   box-shadow: 0 0 0px 1000px transparent !important;
   -webkit-box-shadow: 0 0 0px 1000px transparent !important;
   transition: background-color 5000s ease-in-out 0s !important;
