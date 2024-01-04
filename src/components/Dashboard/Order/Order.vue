@@ -46,7 +46,7 @@ defineProps({
     </div>
     <div class="flex flex-col gap-1">
       <div class="flex flex-col justify-between">
-        <h3>{{ name }}</h3>
+        <h3 class="truncate w-[150px]">{{ name }}</h3>
       </div>
       <p class="text-[13px] text-[#303030]">
         {{

@@ -33,7 +33,7 @@ const showDescription = ref(false);
   <div class="border-b-[1px] border-black pb-2 w-full float-right pt-2">
     <div class="flex flex-row-reverse justify-between items-center">
       <div>
-        <h4 class="text-xl text-right pb-1">{{ name }}</h4>
+        <h4 class="text-xl text-right pb-1 truncate">{{ name }}</h4>
         <p class="text-right">
           1 piece -
           <span class="text-blue-400">${{ numberWithCommas(price) }}</span>

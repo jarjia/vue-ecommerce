@@ -86,7 +86,7 @@ const {
         <div
           class="flex text-xl items-center justify-between border-b-2 py-1 pb-2 border-black"
         >
-          <h3>{{ data.data.name }}</h3>
+          <h3 class="break-words w-4/5">{{ data.data.name }}</h3>
           <div
             v-if="
               userData?.id === data.data?.owner_id &&

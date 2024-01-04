@@ -46,7 +46,7 @@ export const createProductSchema = toTypedSchema(
     name: zod
       .string()
       .min(1, "Product name is required")
-      .max(24, "Product name must be less than 24 characters"),
+      .max(64, "Product name must be less than 64 characters"),
     type: zod
       .string()
       .min(1, {
@@ -76,7 +76,7 @@ export const editProductSchema = toTypedSchema(
     name: zod
       .string()
       .min(1, "Product name is required")
-      .max(24, "Product name must be less than 24 characters"),
+      .max(64, "Product name must be less than 64 characters"),
     type: zod
       .string()
       .min(1, {
