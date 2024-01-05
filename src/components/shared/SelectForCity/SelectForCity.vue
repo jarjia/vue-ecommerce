@@ -3,6 +3,7 @@ import { Ref, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { ErrorMessage } from "vee-validate";
 import { useAuthData } from "@/store";
 import { DropDownIcon } from "@/components";
+import { isTouchDevice } from "@/helpers";
 
 const auth = useAuthData();
 
@@ -96,6 +97,8 @@ onBeforeUnmount(() => {
       >{{
         country.length > 0 && auth.$state.cities.length === 0
           ? "Loading..."
+          : value.length < 1 && searchDropDown_1.length > 0 && isTouchDevice()
+          ? searchDropDown_1.toLowerCase()
           : props.label
       }}</label
     >

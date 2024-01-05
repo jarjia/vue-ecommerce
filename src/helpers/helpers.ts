@@ -14,6 +14,10 @@ export const numberWithCommas = (number: number | string) => {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+export const isTouchDevice = () => {
+  return "ontouchstart" in window || navigator.maxTouchPoints;
+}
+
 export const style = {
   base: {
     color: "#31325F",

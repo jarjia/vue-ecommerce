@@ -38,7 +38,13 @@ watch(isSuccess, (newVal) => {
 
 <template>
   <div v-if="isLoading" class="flex justify-center w-screen h-screen">
-    <img src="/gifs/ecommerce.gif" alt="loading gif" />
+    <div class="h-full flex items-center">
+      <img
+        src="/gifs/loading.gif"
+        alt="loading gif"
+        class="w-[500px] h-[500px] mobile:h-[400px] mobile:w-[400px] sm-mobile:w-[250px] sm-mobile:h-[250px]"
+      />
+    </div>
   </div>
   <div v-else-if="!isSuccess">
     <NotAuthorized />

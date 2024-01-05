@@ -6,6 +6,7 @@ import { CountryItem } from "./types";
 import { ErrorMessage } from "vee-validate";
 import { useAuthData } from "@/store";
 import router from "@/routes";
+import { isTouchDevice } from "@/helpers";
 import { DropDownIcon } from "@/components";
 
 const { data, isLoading } = useQuery({
@@ -97,7 +98,11 @@ onBeforeUnmount(() => {
       v-else
       class="relative z-[2] transition-all"
       :class="value.length > 0 ? 'top-1 left-0' : 'top-[35px] left-2'"
-      >{{ props.label }}</label
+      >{{
+        value.length < 1 && searchDropDown.length > 0 && isTouchDevice()
+          ? searchDropDown.toLowerCase()
+          : props.label
+      }}</label
     >
     <div
       @click="showDropDown = !showDropDown"
@@ -126,7 +131,7 @@ onBeforeUnmount(() => {
           v-else-if="data?.data && data?.data.length > 0"
           class="px-2 py-[2px] cursor-pointer hover:bg-blue-400 hover:text-white"
           v-for="residence in data?.data && data?.data.filter((item: CountryItem) =>
-            item.country.toLowerCase().includes(searchDropDown)
+            item.country.toLowerCase().includes(searchDropDown.toLowerCase())
           )"
           :key="residence.id"
           @click="
