@@ -227,7 +227,7 @@ const onSubmit = handleSubmit(async (values) => {
             </div>
           </div>
           <div>
-            <div class="grid grid-cols-[50%_50%]">
+            <div class="grid grid-cols-[50%_50%] sm:flex sm:gap-2">
               <label>Card information</label>
               <div class="flex flex-col justify-self-end">
                 <span
@@ -248,7 +248,7 @@ const onSubmit = handleSubmit(async (values) => {
                   <div class="absolute flex flex-col items-center">
                     <TriangleIcon />
                     <div
-                      class="w-[300px] relative bottom-[5px] p-3 leading-6 rounded-lg bg-white shadow-2xl text-sm text-black"
+                      class="w-[300px] sm-mobile:w-[200px] relative bottom-[5px] p-3 leading-6 rounded-lg bg-white shadow-2xl text-sm text-black"
                     >
                       *Since this is a testing payment system please input
                       testing card number "4242 4242 4242 4242" fill other

@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="flex flex-col min-w-[350px]"
+    class="flex flex-col min-w-[350px] sm-mobile:min-w-[200px]"
     :class="isCheckout ? 'mt-0' : 'mt-3 sm:mt-0'"
   >
     <label v-if="isCheckout">Country of residence</label>

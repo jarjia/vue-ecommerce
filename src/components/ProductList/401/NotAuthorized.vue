@@ -14,7 +14,7 @@ const handleRedirect = () => {
 
 <template>
   <div
-    class="absolute top-1/2 left-1/2 w-1/2 transform -translate-x-1/2 -translate-y-1/2"
+    class="absolute top-1/2 left-1/2 w-1/2 sm-mobile:w-full sm-mobile:px-2 transform -translate-x-1/2 -translate-y-1/2"
   >
     <div class="h-[55%] w-[55%] m-auto">
       <img src="/images/401.jpg" class="w-full h-full" alt="401 not allowed" />
@@ -24,7 +24,7 @@ const handleRedirect = () => {
       <p>looks like you are not authorized to visit this page.</p>
       <button
         @click="handleRedirect"
-        class="bg-red-400 w-80 m-auto py-2 rounded text-white"
+        class="bg-red-400 w-80 max-w-full m-auto py-2 rounded text-white"
       >
         Go to login
       </button>

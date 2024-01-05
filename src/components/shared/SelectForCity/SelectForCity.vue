@@ -86,7 +86,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="flex flex-col min-w-[350px]"
+    class="flex flex-col min-w-[350px] sm-mobile:min-w-[200px]"
     :class="isCheckout ? 'mt-0' : 'mt-3'"
   >
     <label v-if="isCheckout">City of residence</label>

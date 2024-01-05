@@ -34,6 +34,9 @@ const isOrder = ref(false);
       <div
         class="flex flex-col gap-2 overflow-y-scroll scrollbar max-h-[calc(100vh-150px)] bg-[#F5F5FA] w-full h-full rounded-l-xl rounded-tl-none p-2"
       >
+        <p class="text-center text-gray-600 text-sm">
+          (Each order will arrive in 2 minutes)
+        </p>
         <Order
           v-if="data?.data.length > 0"
           v-for="order in data?.data"
@@ -58,6 +61,9 @@ const isOrder = ref(false);
             class="text-xl text-center p-4 capitalize sticky top-[-10px] bg-[#F5F5FA]"
           >
             your orders
+            <p class="text-sm text-gray-600">
+              (Each order will arrive in 2 minutes)
+            </p>
           </h2>
           <div class="scrollbar flex flex-col gap-2">
             <div v-if="isLoading" class="flex items-center justify-center">
