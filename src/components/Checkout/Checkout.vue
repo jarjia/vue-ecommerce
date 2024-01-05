@@ -197,7 +197,12 @@ const onSubmit = handleSubmit(async (values) => {
             :value="(country as string)"
             label="Country of residence"
           />
-          <input type="hidden" name="country" v-model="country" />
+          <input
+            type="hidden"
+            name="country"
+            readonly="true"
+            v-model="country"
+          />
           <SelectForCity
             :isCheckout="true"
             :value="(city as string)"
@@ -205,7 +210,7 @@ const onSubmit = handleSubmit(async (values) => {
             :setCity="setCity"
             :country="(country as string)"
           />
-          <input type="hidden" name="country" v-model="city" />
+          <input type="hidden" name="country" readonly="true" v-model="city" />
           <div class="flex flex-col">
             <label>Address</label>
             <input

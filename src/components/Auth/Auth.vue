@@ -139,7 +139,12 @@ const onSubmit = handleSubmit((values) => {
             :setCountry="setCountry"
             :setCity="setCity"
           />
-          <input type="hidden" name="country" v-model="country" />
+          <input
+            type="hidden"
+            readonly="true"
+            name="country"
+            v-model="country"
+          />
           <SelectForCity
             :isCheckout="false"
             :value="(city as string)"
@@ -147,7 +152,7 @@ const onSubmit = handleSubmit((values) => {
             :setCity="setCity"
             :country="(country as string)"
           />
-          <input name="city" type="hidden" v-model="city" />
+          <input name="city" type="hidden" readonly="true" v-model="city" />
           <Input type="text" name="address" label="Address" />
           <button
             type="submit"
