@@ -144,22 +144,22 @@ const onSubmit = handleSubmit(async (values) => {
       class="fixed bg-[#0000004f] w-full top-0 flex justify-center items-center h-screen z-[99]"
     >
       <div
-        class="bg-white grid grid-rows-[70%_30%] mobile:grid-rows-[60%_40%] avg-desk-for-view:h-1/2 mobile:h-1/3 items-center justify-center flex-col shadow-2xl w-1/2 h-4/6 rounded"
+        class="bg-white grid grid-rows-[70%_30%] mobile:grid-rows-[60%_40%] avg-desk-for-view:h-1/2 mobile:h-1/3 sm-mobile:w-full items-center justify-center flex-col shadow-2xl w-1/2 h-4/6 rounded"
       >
         <img
           v-if="showPaymentStatus === 'pending'"
           src="/gifs/loading.gif"
-          class="h-full"
+          class="h-full m-auto"
         />
         <img
           v-else-if="showPaymentStatus === 'error'"
           src="/images/error.png"
-          class="h-[80%]"
+          class="h-[80%] m-auto"
         />
         <img
           v-if="showPaymentStatus === 'success'"
           src="/images/success.png"
-          class="h-[80%]"
+          class="h-[80%] m-auto"
         />
         <div class="flex flex-col">
           <p class="text-xl text-center">{{ cardError }}</p>
