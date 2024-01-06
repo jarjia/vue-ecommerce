@@ -29,11 +29,9 @@ const showDescription = ref(false);
 </script>
 
 <template>
-  <div
-    class="border-b-[1px] border-black pb-2 truncate w-full float-right pt-2"
-  >
-    <div class="flex flex-row-reverse justify-between w-full items-center">
-      <div class="flex flex-col w-full">
+  <div class="border-b-[1px] border-black pb-2 w-full float-right pt-2">
+    <div class="flex flex-row-reverse justify-between items-center">
+      <div class="flex flex-col">
         <h4 class="text-xl w-full text-right pb-1 truncate">
           {{ name }}
         </h4>
@@ -59,7 +57,7 @@ const showDescription = ref(false);
     </div>
     <div class="relative">
       <p
-        class="text-right pt-2 transition-opacity duration-500 avg-desk-for-view:text-sm"
+        class="text-right break-words pt-2 transition-opacity duration-500 avg-desk-for-view:text-sm"
         :class="
           showDescription
             ? 'h-auto opacity-1'
