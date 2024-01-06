@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ArrowIcon } from "@/components";
 import { ref } from "vue";
 import { numberWithCommas } from "@/helpers";
 
@@ -30,29 +29,32 @@ const showDescription = ref(false);
 </script>
 
 <template>
-  <div class="border-b-[1px] border-black pb-2 w-full float-right pt-2">
-    <div class="flex flex-row-reverse justify-between items-center">
-      <div>
-        <h4 class="text-xl text-right pb-1 truncate">{{ name }}</h4>
+  <div
+    class="border-b-[1px] border-black pb-2 truncate w-full float-right pt-2"
+  >
+    <div class="flex flex-row-reverse justify-between w-full items-center">
+      <div class="flex flex-col w-full">
+        <h4 class="text-xl w-full text-right pb-1 truncate">
+          {{ name }}
+        </h4>
         <p class="text-right">
           1 piece -
           <span class="text-blue-400">${{ numberWithCommas(price) }}</span>
         </p>
         <p
-          class="sm-mobile:flex sm-mobile:flex-col sm-mobile:text-sm text-right whitespace-break-spaces overflow-ellipsis overflow-hidden"
+          class="sm-mobile:flex sm-mobile:flex-col sm-mobile:text-sm text-right"
         >
           Ordering {{ quantity }} piece(s) - {{ type }} -
           <span class="text-blue-400"
             >${{ numberWithCommas(quantity * price) }}</span
           >
         </p>
-      </div>
-      <div @click="showDescription = !showDescription" class="cursor-pointer">
-        <ArrowIcon
-          :isCheckout="true"
-          class="transition-transform"
-          :class="showDescription ? 'rotate-[270deg]' : 'rotate-90'"
-        />
+        <button
+          @click="showDescription = !showDescription"
+          class="text-right text-blue-400"
+        >
+          {{ showDescription ? "close" : "see" }} description
+        </button>
       </div>
     </div>
     <div class="relative">
