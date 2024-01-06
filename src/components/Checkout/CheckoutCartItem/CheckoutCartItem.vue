@@ -38,7 +38,9 @@ const showDescription = ref(false);
           1 piece -
           <span class="text-blue-400">${{ numberWithCommas(price) }}</span>
         </p>
-        <p class="sm-mobile:flex sm-mobile:flex-col sm-mobile:text-sm">
+        <p
+          class="sm-mobile:flex sm-mobile:flex-col sm-mobile:text-sm text-right"
+        >
           Ordering {{ quantity }} piece(s) - {{ type }} -
           <span class="text-blue-400"
             >${{ numberWithCommas(quantity * price) }}</span
